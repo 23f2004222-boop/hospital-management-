@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Welcome Patient</h3>
+
+<div class="mb-3">
+    <a href="{{ url_for('patient_own_history') }}" class="btn btn-sm btn-outline-primary">
+        View History
+    </a>
+</div>
+
+<div class="row">
+
+    <!-- LEFT: Departments -->
+    <div class="col-md-6">
+        <h5>Departments</h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Department</th>
+                    <th>Doctors</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in departments %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ d.department_name }}</td>
+                    <td>
+                        <a href="{{ url_for('patient_department_detail', dept_id=d.id) }}"
+                           class="btn btn-sm btn-outline-primary">view</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3">no departments yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RIGHT: Upcoming Appointments -->
+    <div class="col-md-6">
+        <h5>Upcoming Appointments</h5>
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in upcoming %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ a.doctor.username if a.doctor else '-' }}</td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.time }}</td>
+                    <td>{{ a.status }}</td>
+                    <td>
+                        <form action="{{ url_for('patient_cancel_appointment', appt_id=a.id) }}" method="POST">
+                            <button class="btn btn-sm btn-outline-danger">cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6">no upcoming appointments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- COMPLETED SECTION -->
+<div class="mt-4">
+    <h5>Completed Appointments</h5>
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in completed %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ a.doctor.username if a.doctor else '-' }}</td>
+                <td>{{ a.date }}</td>
+                <td>{{ a.time }}</td>
+                <td>{{ a.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">no completed appointments</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

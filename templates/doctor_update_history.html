@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Update History{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Update Patient History</h3>
+
+<p>
+    <strong>Patient:</strong> {{ appt.patient.username if appt.patient else '-' }}<br>
+    <strong>Date:</strong> {{ appt.date }} | <strong>Time:</strong> {{ appt.time }}
+</p>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Visit Type</label>
+        <input type="text" name="visit_type" class="form-control" value="{{ appt.visit_type or '' }}" placeholder="e.g. In-person, Online">
+    </div>
+
+    <div class="mb-3">
+        <label>Tests Done</label>
+        <input type="text" name="tests_done" class="form-control" value="{{ appt.tests_done or '' }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Diagnosis</label>
+        <input type="text" name="diagnosis" class="form-control" value="{{ appt.diagnosis or '' }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Prescription</label>
+        <input type="text" name="prescription" class="form-control" value="{{ appt.prescription or '' }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Medicines</label>
+        <input type="text" name="medicines" class="form-control" value="{{ appt.medicines or '' }}">
+    </div>
+
+    <button class="btn btn-success">Save</button>
+    <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}

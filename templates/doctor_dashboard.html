@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Welcome Doctor</h3>
+
+<div class="mb-3">
+    <a href="{{ url_for('doctor_availability') }}" class="btn btn-sm btn-outline-primary">
+        Provide Availability
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <h5>Upcoming Appointments</h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in upcoming %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ a.patient.username if a.patient else '-' }}</td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.time }}</td>
+                    <td class="d-flex gap-1">
+
+                        <!-- Update history (add prescription, diagnosis) -->
+                        <a href="{{ url_for('doctor_update_history', appt_id=a.id) }}"
+                           class="btn btn-sm btn-outline-success">
+                            update
+                        </a>
+
+                        <!-- Mark appointment as complete -->
+                        <form action="{{ url_for('doctor_mark_complete', appt_id=a.id) }}"
+                              method="POST" style="display:inline;">
+                            <button class="btn btn-sm btn-outline-primary">
+                                complete
+                            </button>
+                        </form>
+
+                        <!-- View details -->
+                        <a href="{{ url_for('doctor_view_details', appt_id=a.id) }}"
+                           class="btn btn-sm btn-outline-secondary">
+                            view
+                        </a>
+
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5">no upcoming appointments</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-5">
+        <h5>Assigned Patients</h5>
+        <ul class="list-group">
+            {% for p in patients %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ p.username }}
+                <a href="{{ url_for('doctor_patient_history', patient_id=p.id) }}"
+                   class="btn btn-sm btn-outline-primary">
+                    history
+                </a>
+            </li>
+            {% else %}
+            <li class="list-group-item">no patients yet</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

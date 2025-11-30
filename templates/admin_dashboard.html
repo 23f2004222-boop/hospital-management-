@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Welcome Admin</h3>
+
+<div class="mb-4">
+    <a href="{{ url_for('admin_add_doctor') }}" class="btn btn-sm btn-success">Add New Doctor</a>
+</div>
+<form action="{{ url_for('admin_search') }}" method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="search doctor or patient...">
+        <button class="btn btn-outline-primary">search</button>
+    </div>
+</form>
+<div class="row">
+    <div class="col-md-6">
+        <h5>Registered Doctors</h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Dept</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in doctors %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ d.username }}</td>
+                    <td>{{ d.department.department_name if d.department else '-' }}</td>
+
+                    <td>
+
+                        <a href="{{ url_for('admin_edit_doctor', doctor_id=d.id) }}"
+                        class="btn btn-sm btn-outline-primary">
+                            edit
+                        </a>
+
+                        {% if d.blacklisted %}
+                            <a href="{{ url_for('admin_unblacklist_user', user_id=d.id) }}"
+                            class="btn btn-sm btn-outline-warning">
+                                un-blacklist
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('admin_blacklist_user', user_id=d.id) }}"
+                            class="btn btn-sm btn-outline-warning">
+                                blacklist
+                            </a>
+                        {% endif %}
+
+                        <form action="{{ url_for('admin_delete_doctor', doctor_id=d.id) }}" 
+                            method="POST" style="display:inline;">
+                            <button class="btn btn-sm btn-outline-danger">remove</button>
+                        </form>
+
+                    </td>
+
+                </tr>
+                {% else %}
+                <tr><td colspan="4">no doctors yet</td></tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+    <div class="mt-5">
+    <h5>Departments</h5>
+
+    <div class="mb-2">
+        <a href="{{ url_for('admin_add_department') }}" class="btn btn-sm btn-primary">Add Department</a>
+    </div>
+
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Department Name</th>
+                <th>Description</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in departments %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ d.department_name }}</td>
+                <td>{{ d.description }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin_delete_department', dept_id=d.id) }}">
+                        <button class="btn btn-sm btn-outline-danger">delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">no departments found</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    <div class="col-md-6">
+        <h5>Registered Patients</h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>History</th>
+                </tr>
+            </thead>
+        <tbody>
+            {% for p in patients %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ p.username }}</td>
+
+                <td>
+                    <!-- BLACKLIST TOGGLE -->
+                    {% if p.blacklisted %}
+                        <a href="{{ url_for('admin_unblacklist_user', user_id=p.id) }}"
+                        class="btn btn-sm btn-outline-warning">
+                            un-blacklist
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('admin_blacklist_user', user_id=p.id) }}"
+                        class="btn btn-sm btn-outline-warning">
+                            blacklist
+                        </a>
+                    {% endif %}
+
+                    <form action="{{ url_for('admin_delete_patient', patient_id=p.id) }}" 
+                        method="POST" style="display:inline;">
+                        <button class="btn btn-sm btn-outline-danger">remove</button>
+                    </form>
+
+                    <a href="{{ url_for('admin_patient_history', patient_id=p.id) }}"
+                    class="btn btn-sm btn-outline-info">
+                        history
+                    </a>
+                </td>
+
+            </tr>
+            {% else %}
+            <tr><td colspan="3">no patients yet</td></tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h5>Upcoming Appointments</h5>
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in upcoming %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ a.patient.username if a.patient else '-' }}</td>
+                <td>{{ a.doctor.username if a.doctor else '-' }}</td>
+                <td>{{ a.date }}</td>
+                <td>{{ a.time }}</td>
+                <td>{{ a.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">no appointments yet</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

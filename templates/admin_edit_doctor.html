@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit Doctor{% endblock %}
+
+{% block content %}
+<h3>Edit Doctor</h3>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="username" class="form-control" value="{{ doc.username }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value="{{ doc.email }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Experience</label>
+        <input type="number" name="experience" class="form-control" value="{{ doc.experience }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Qualifications</label>
+        <textarea name="qualifications" class="form-control">{{ doc.qualifications }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Department</label>
+        <select name="department_id" class="form-select">
+            {% for d in departments %}
+            <option value="{{ d.id }}" {% if doc.department_id == d.id %}selected{% endif %}>
+                {{ d.department_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button class="btn btn-success">Update</button>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+
+{% endblock %}

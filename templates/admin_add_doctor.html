@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Add Doctor{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Add a new Doctor</h3>
+
+<form method="POST">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="mb-3">
+                <label>Full Name</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <div class="mb-3">
+                <label>Department</label>
+                <select name="department_id" class="form-select">
+                    <option value="">-- select --</option>
+                    {% for d in departments %}
+                    <option value="{{ d.id }}">{{ d.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Experience (years)</label>
+                <input type="number" name="experience" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label>Qualifications</label>
+                <textarea name="qualifications" class="form-control" rows="2"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="btn btn-success">Create</button>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}

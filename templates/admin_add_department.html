@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Add Department{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Add Department</h3>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Department Name</label>
+        <input type="text" name="department_name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea name="description" class="form-control"></textarea>
+    </div>
+
+    <button class="btn btn-success">Save</button>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back</a>
+</form>
+{% endblock %}

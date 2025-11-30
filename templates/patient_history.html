@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Patient History{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Patient History</h3>
+
+<p>
+    <strong>Patient Name:</strong> {{ patient.username }}<br>
+    <strong>Email:</strong> {{ patient.email }}
+</p>
+
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Visit Date</th>
+            <th>Visit Type</th>
+            <th>Tests Done</th>
+            <th>Diagnosis</th>
+            <th>Prescription</th>
+            <th>Medicines</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in appts %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ a.date }}</td>
+
+            <!-- treatment values -->
+            <td>{{ a.treatment.visit_type if a.treatment else '-' }}</td>
+            <td>{{ a.treatment.tests_done if a.treatment else '-' }}</td>
+            <td>{{ a.treatment.diagnosis if a.treatment else '-' }}</td>
+            <td>{{ a.treatment.prescription if a.treatment else '-' }}</td>
+            <td>{{ a.treatment.medicines if a.treatment else '-' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">no visits yet</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ back_url }}" class="btn btn-secondary">Back</a>
+{% endblock %}

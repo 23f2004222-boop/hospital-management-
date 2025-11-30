@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Department Details{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">{{ dept.department_name }}</h3>
+
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Doctor</th>
+            <th>Experience</th>
+            <th>Qualification</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in doctors %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ d.username }}</td>
+            <td>{{ d.experience or '-' }} years</td>
+            <td>{{ d.qualifications or '-' }}</td>
+            <td>
+                    <a href="{{ url_for('patient_check_availability', doctor_id=d.id) }}"
+                   class="btn btn-sm btn-primary">
+                    Check Availability
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No doctors in this department</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary">Back</a>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Doctor Availability{% endblock %}
+
+{% block content %}
+<h3 class="mb-3">Doctor's Availability</h3>
+
+
+
+<!-- Add next 7 days -->
+<a href="{{ url_for('doctor_add_next7_days') }}" class="btn btn-sm btn-success mb-3">
+    Add availability for next 7 days
+</a>
+
+<h5>Existing Slots</h5>
+<table class="table table-sm table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Morning</th>
+            <th>Evening</th>
+            <th>Save</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in slots %}
+        <tr>
+            <form method="POST" action="{{ url_for('doctor_update_slot', slot_id=s.id) }}">
+                <td>{{ loop.index }}</td>
+                <td>{{ s.date }}</td>
+
+                <!-- TOGGLE MORNING -->
+                <td>
+                    <input type="checkbox" name="morning" 
+                           {% if s.morning %}checked{% endif %}>
+                </td>
+
+                <!-- TOGGLE EVENING -->
+                <td>
+                    <input type="checkbox" name="evening" 
+                           {% if s.evening %}checked{% endif %}>
+                </td>
+
+                <td>
+                    <button class="btn btn-sm btn-primary">update</button>
+                </td>
+            </form>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">no availability yet</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
